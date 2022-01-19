@@ -16,9 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-
 from file_and_folder_indexer import views
-
 
 extra_patterns = [
     path('file/', views.file),
