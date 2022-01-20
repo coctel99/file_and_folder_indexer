@@ -7,9 +7,3 @@ def index(request):
 
 def api(request):
     return HttpResponse("Api page.")
-
-
-def file(request, path: str = None):
-    if not path:
-        return HttpResponse("Files tree page.   ")
-    return HttpResponse("File page.")

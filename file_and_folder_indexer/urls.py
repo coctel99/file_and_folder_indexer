@@ -17,18 +17,15 @@ from django.contrib import admin
 from django.urls import include, path
 
 from file_and_folder_indexer import views
+from file_reader.urls import filepath_urlpatterns
 
-extra_patterns = [
-    path('file/', views.file),
-    path('file/<str:path>/', views.file),
-]
-
-api_patterns = [
-
+api_urlpatterns = [
+    path('', views.api),
+    path('file/', include(filepath_urlpatterns)),
 ]
 
 urlpatterns = [
     path('', views.index),
-    path('api/', include(extra_patterns)),
     path('admin/', admin.site.urls),
+    path('api/', include(api_urlpatterns)),
 ]
