@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'file_reader',
+    'file_and_folder_indexer.apps.file_reader',
 ]
 
 MIDDLEWARE = [

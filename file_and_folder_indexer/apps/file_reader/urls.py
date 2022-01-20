@@ -1,6 +1,6 @@
 from django.urls import path
 
-from file_reader import views
+from file_and_folder_indexer.apps.file_reader import views
 
 filepath_urlpatterns = [
     path('', views.filesystem_view),
