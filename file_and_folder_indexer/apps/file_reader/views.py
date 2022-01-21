@@ -6,14 +6,9 @@ from django.urls import path
 
 
 class FileSystem:
-    target_path = 'D:\\Files'
-    # target_path = target_path.split(':')[1]
-    if not target_path:
-        pass    # Invalid path
-
     @staticmethod
     def get_objects_list(target_path: str):
-        filesystem = [FileSystem.target_path]
+        filesystem = [target_path]
         for root, subdirectories, files in os.walk(target_path):
             for subdirectory in subdirectories:
                 filesystem.append(os.path.join(root, subdirectory))
@@ -22,8 +17,10 @@ class FileSystem:
         return filesystem
 
     @staticmethod
-    def setup(path: str):
-        FileSystem.target_path = path
+    def read_file(path: str):
+        with open(path, encoding='utf-8') as fi:
+            file = fi.read()
+        return file
 
 
 class Converter:
@@ -53,11 +50,10 @@ def filesystem_view(request, url_path: path = None):
         files = FileSystem.get_objects_list(path)
         return HttpResponse("; ".join(files))
     elif os.path.isfile(path):
-        with open(path) as fi:
-            file = fi.read()
-            return HttpResponse(file)
+        file = FileSystem.read_file(path)
+        return HttpResponse(file)
     else:
-        return HttpResponse("Not a file or a directory.")
+        return HttpResponseNotFound("No such file or directory.")
 
 
 if __name__ == '__main__':
