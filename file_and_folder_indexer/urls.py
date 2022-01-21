@@ -17,8 +17,8 @@ from django.contrib import admin
 from django.urls import include, path
 
 from file_and_folder_indexer import views
-from file_and_folder_indexer.apps.file_reader.urls import (
-    filesystem_urlpatterns)
+from file_and_folder_indexer.apps.file_reader.urls import \
+    filesystem_urlpatterns
 
 api_urlpatterns = [
     path('', views.api),
