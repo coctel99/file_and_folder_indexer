@@ -1,15 +1,16 @@
 import json
 import os
 
-from django.shortcuts import render
 from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseNotFound)
+# from django.shortcuts import render
 from django.urls import path
 
 from file_and_folder_indexer.apps.file_reader.apps import FileReaderConfig
-from file_and_folder_indexer.apps.file_reader.convertation import convert_to_path
+from file_and_folder_indexer.apps.file_reader.convertation import \
+    convert_to_path
 from file_and_folder_indexer.apps.file_reader.indexer import (
-    get_word_statistics, get_file_statistics, get_folder_statistics)
+    get_file_statistics, get_folder_statistics, get_word_statistics)
 
 
 def filesystem_view(request, url_path: path = None):
