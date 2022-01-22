@@ -38,8 +38,9 @@ def filesystem_view(request, url_path: path = None):
         return HttpResponseNotFound("File extension is not in allowed "
                                     "extensions list.")
     elif os.path.isfile(os.path.dirname(path)):
-        word = path.split("\\")[-1]
-        info = get_word_statistics(word)
-        info = json.dumps(info, indent=4, ensure_ascii=False)
-        return HttpResponse(info, content_type='application/json')
+        info = get_word_statistics(path)
+        if info:
+            info = json.dumps(info, indent=4, ensure_ascii=False)
+            return HttpResponse(info, content_type='application/json')
+        return HttpResponseNotFound("No such word in file.")
     return HttpResponseNotFound("No such file or directory.")

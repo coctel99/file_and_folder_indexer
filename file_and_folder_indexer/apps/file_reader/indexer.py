@@ -100,13 +100,20 @@ def get_file_statistics(path: str) -> dict:
             "consonant_number": consonant_number}
 
 
-def get_word_statistics(word: str) -> dict:
+def get_word_statistics(path: str) -> dict or None:
     """
     Get number of vowels and consonants in word
     :param word: Word to check
     :return: Dict of 2 values: the number of vowels and the number of
     consonants
     """
+    word = path.split("\\")[-1]
+    path = os.path.dirname(path)
+    unique_words, *_ = read_file(path).values()
+    times_in_text = unique_words.get(word, 0)
+    if times_in_text == 0:
+        return None
+
     vowel_number = 0
     consonant_number = 0
 
@@ -117,7 +124,8 @@ def get_word_statistics(word: str) -> dict:
         elif ascii_char in CONSONANTS:
             consonant_number += 1
 
-    return {"vowel_number": vowel_number,
+    return {"times_in_text": times_in_text,
+            "vowel_number": vowel_number,
             "consonant_number": consonant_number}
 
 
