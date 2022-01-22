@@ -19,3 +19,4 @@ jobs:
           ls -la
           flake8 .
           isort --check .
+          python manage.py test
