@@ -48,6 +48,8 @@ def read_file(path: str) -> dict:
     :return: Dict of 3 values: dict of unique words, vowels number and
     consolants number
     """
+    # TODO: reorganize functions remove duplicated code, fix counting
+    #  average words length
     word = ""
     unique_words = {}
     vowel_number = 0
@@ -90,6 +92,7 @@ def get_file_statistics(path: str) -> dict:
     #                 for word in sorted_words]
     most_recent = sorted_words[:TOP_N]
     least_recent = sorted_words[-TOP_N:]
+    least_recent.reverse()
     word_lengths = [len(word) for word in unique_words]
     average_word_length = sum(word_lengths) / len(unique_words)
 
@@ -131,7 +134,8 @@ def get_word_statistics(path: str) -> dict or None:
 
 def get_folder_statistics(root_path: os.path) -> dict:
     files_and_folders = get_objects_list(root_path)
-    number_of_files = len([files for *_, files in os.walk(root_path)])
+    number_of_files = len([file for file in files_and_folders
+                           if os.path.isfile(file)])
     unique_words = {}
     vowel_number = 0
     consonant_number = 0
@@ -149,8 +153,12 @@ def get_folder_statistics(root_path: os.path) -> dict:
     sorted_words = sorted(unique_words, key=unique_words.get, reverse=True)
     most_recent = sorted_words[:TOP_N]
     least_recent = sorted_words[-TOP_N:]
+    least_recent.reverse()
     word_lengths = [len(word) for word in unique_words]
-    average_word_length = sum(word_lengths) / len(unique_words)
+    if len(unique_words) > 0:
+        average_word_length = sum(word_lengths) / len(unique_words)
+    else:
+        average_word_length = 0
 
     return {"files_and_folders": files_and_folders,
             "number_of_files": number_of_files,
