@@ -33,8 +33,11 @@ class IndexerTestCase(TestCase):
     def test_get_files_and_folders_paths(self):
         self.set_up_file('test')
         lst = get_objects_list(test_dir)
-        self.assertEqual(lst, ['test_dir', 'test_dir\\Empty Folder',
-                               'test_dir\\test.txt'])
+        files_and_folders = [test_dir]
+        files_and_folders.extend([os.path.join(test_dir, file)
+                                  for file in os.listdir(test_dir)])
+
+        self.assertEqual(lst, files_and_folders)
 
     def test_read_file(self):
         self.set_up_file('Some text words in text file.')
