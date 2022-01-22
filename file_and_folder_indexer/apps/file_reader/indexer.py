@@ -110,7 +110,7 @@ def get_word_statistics(path: str) -> dict or None:
     :return: Dict of 2 values: the number of vowels and the number of
     consonants
     """
-    word = path.split("\\")[-1]
+    word = os.path.split(path)[-1]
     path = os.path.dirname(path)
     unique_words, *_ = read_file(path).values()
     times_in_text = unique_words.get(word, 0)
