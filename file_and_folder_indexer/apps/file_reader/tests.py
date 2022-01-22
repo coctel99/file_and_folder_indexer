@@ -74,7 +74,6 @@ class IndexerTestCase(TestCase):
             info.get('consonant_number') == consonant_number
         ]))
 
-
     def test_get_file_statistics(self):
         text = ('test test test test test words words words words in in in '
                 'a a file')
