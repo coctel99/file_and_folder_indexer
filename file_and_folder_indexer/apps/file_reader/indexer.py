@@ -69,8 +69,8 @@ def read_file(path: str) -> dict:
         sorted_words = sorted(unique_words, key=unique_words.get, reverse=True)
         most_recent = sorted_words[:TOP_N]
         least_recent = sorted_words[-TOP_N:]
-        # average_word_length = sum(unique_words.values()) / len(unique_words)
-        average_word_length = sum([len(word) for word in unique_words]) / len(unique_words)
+        average_word_length = (sum([len(word) for word in unique_words]) /
+                               len(unique_words))
         return {"most_recent": most_recent,
                 "least_recent": least_recent,
                 "average_word_length": average_word_length,
@@ -95,7 +95,3 @@ def get_word_statistics(word: str) -> dict:
             consonant_number += 1
     return {"vowel_number": vowel_number,
             "consonant_number": consonant_number}
-
-
-if __name__ == '__main__':
-    print(read_file('D:\\Files\\Texts\\text1.txt'))
