@@ -95,8 +95,7 @@ class IndexerTestCase(TestCase):
     def test_get_folder_statistics(self):
         self.set_up_file('test text')
         info = get_folder_statistics(test_dir)
-        files_and_folders = ['test_dir', 'test_dir\\Empty Folder',
-                             'test_dir\\test.txt']
+        files_and_folders = get_objects_list(test_dir)
         number_of_files = 1
         most_recent = ['test', 'text']
         least_recent = ['text', 'test']
