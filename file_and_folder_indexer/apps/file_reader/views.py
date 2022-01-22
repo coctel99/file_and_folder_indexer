@@ -43,9 +43,3 @@ def filesystem_view(request, url_path: path = None):
         info = json.dumps(info, indent=4, ensure_ascii=False)
         return HttpResponse(info)
     return HttpResponseNotFound("No such file or directory.")
-
-
-if __name__ == '__main__':
-    print(convert_to_url('D:\\Files\\Folder\\Subfolder'))
-    print(convert_to_path('D/Files/Folder/Subfolder'))
-    print(convert_to_url('D:\\Files\\Folder\\File+Name%20n'))
