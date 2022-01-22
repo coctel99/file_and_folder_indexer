@@ -11,6 +11,11 @@ TOP_N = 5
 
 
 def get_objects_list(target_path: str) -> List:
+    """
+    Get list of files and folders for the specified path
+    :param target_path: Path to check
+    :return: List of files and folders
+    """
     filesystem = [target_path]
     for root, subdirectories, files in os.walk(target_path):
         for subdirectory in subdirectories:
@@ -52,7 +57,7 @@ def read_file(path: str) -> dict:
             # If character is an any unicode Letter character
             if category(char).startswith("L"):
                 word += char
-                ascii_char = unidecode(char)
+                ascii_char = unidecode(char.lower())
                 if ascii_char in VOWELS:
                     vowel_number += 1
                 elif ascii_char in CONSONANTS:
@@ -64,13 +69,32 @@ def read_file(path: str) -> dict:
         sorted_words = sorted(unique_words, key=unique_words.get, reverse=True)
         most_recent = sorted_words[:TOP_N]
         least_recent = sorted_words[-TOP_N:]
-        average_word_length = sum(unique_words.values()) / len(unique_words)
+        # average_word_length = sum(unique_words.values()) / len(unique_words)
+        average_word_length = sum([len(word) for word in unique_words]) / len(unique_words)
         return {"most_recent": most_recent,
                 "least_recent": least_recent,
                 "average_word_length": average_word_length,
                 "vowel_number": vowel_number,
-                "consonant_number": consonant_number,
-                }
+                "consonant_number": consonant_number}
+
+
+def get_word_statistics(word: str) -> dict:
+    """
+    Get number of vowels and consonants in word
+    :param word: Word to check
+    :return: Dict of 2 values: the number of vowels and the number of
+    consonants
+    """
+    vowel_number = 0
+    consonant_number = 0
+    for char in word:
+        ascii_char = unidecode(char.lower())
+        if ascii_char in VOWELS:
+            vowel_number += 1
+        elif ascii_char in CONSONANTS:
+            consonant_number += 1
+    return {"vowel_number": vowel_number,
+            "consonant_number": consonant_number}
 
 
 if __name__ == '__main__':
