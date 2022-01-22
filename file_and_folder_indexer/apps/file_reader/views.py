@@ -3,7 +3,6 @@ import os
 
 from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseNotFound)
-# from django.shortcuts import render
 from django.urls import path
 
 from file_and_folder_indexer.apps.file_reader.apps import FileReaderConfig

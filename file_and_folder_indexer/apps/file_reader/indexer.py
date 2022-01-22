@@ -63,9 +63,13 @@ def read_file(path: str) -> dict:
                     vowel_number += 1
                 elif ascii_char.issubset(CONSONANTS):
                     consonant_number += 1
-            elif word or not char:
+            elif word:
                 unique_words[word] = unique_words.get(word, 0) + 1
                 word = ""
+
+    # If word buffer is not empty
+    if word:
+        unique_words[word] = unique_words.get(word, 0) + 1
 
     return {"unique_words": unique_words,
             "vowel_number": vowel_number,
