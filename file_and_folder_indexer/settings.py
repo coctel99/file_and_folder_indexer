@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'file_and_folder_indexer.apps.file_reader',
+    'rest_framework',
+    'drf_yasg',
 ]
 
 LOGGING = {
@@ -93,6 +95,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'file_and_folder_indexer.wsgi.application'
 
+REST_FRAMEWORK = {
+  'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
