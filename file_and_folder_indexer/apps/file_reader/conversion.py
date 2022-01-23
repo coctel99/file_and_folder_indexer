@@ -1,3 +1,6 @@
+import os
+
+
 def convert_to_url(path: str) -> str:
     """
     Convert path string to url string
@@ -17,11 +20,8 @@ def convert_to_path(url: str) -> str:
     :param url: Url to convert
     :return: Path string
     """
-    index = url.find('/')
-    if index > 0:
-        path = url[:index] + ':' + url[index:]
-        path = path.replace('/', '\\')
-    # If is a disk root
-    else:
-        path = url + ':\\'
+    if ':' not in url:
+        raise ValueError('No ":" symbol found. Please, specify the absolute'
+                         'path to the folder, file or word in the text file.')
+    path = os.path.normpath(url + "/")
     return path

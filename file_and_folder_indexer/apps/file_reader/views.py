@@ -6,8 +6,7 @@ from django.http import (HttpResponse, HttpResponseBadRequest,
 from django.urls import path
 
 from file_and_folder_indexer.apps.file_reader.apps import FileReaderConfig
-from file_and_folder_indexer.apps.file_reader.convertation import \
-    convert_to_path
+from file_and_folder_indexer.apps.file_reader.conversion import convert_to_path
 from file_and_folder_indexer.apps.file_reader.indexer import (
     get_file_statistics, get_folder_statistics, get_word_statistics)
 
@@ -23,7 +22,10 @@ def filesystem_view(request, url_path: path = None):
     if not url_path:
         return HttpResponseBadRequest("Specify path to folder, file or word"
                                       "in the text file.")
-    path = convert_to_path(url_path)
+    try:
+        path = convert_to_path(url_path)
+    except ValueError as err:
+        return HttpResponseBadRequest(err)
 
     if os.path.isdir(path):
         info = get_folder_statistics(path)
