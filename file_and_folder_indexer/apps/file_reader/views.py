@@ -4,6 +4,8 @@ import os
 from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseNotFound)
 from django.urls import path
+from rest_framework.decorators import api_view
+from drf_yasg.utils import swagger_auto_schema
 
 from file_and_folder_indexer.apps.file_reader.apps import FileReaderConfig
 from file_and_folder_indexer.apps.file_reader.conversion import convert_to_path
@@ -11,6 +13,16 @@ from file_and_folder_indexer.apps.file_reader.indexer import (
     get_file_statistics, get_folder_statistics, get_word_statistics)
 
 
+@swagger_auto_schema(
+    method='get',
+    operation_summary="Get statistics about folder, file or word in the text",
+    responses={
+        '200': 'Ok',
+        '400': 'Unable to process the specified path',
+        '404': 'Path destination not found',
+    }
+)
+@api_view(['GET'])
 def filesystem_view(request, url_path: path = None):
     """
     Get HTTP response with statistics about folder, file or word in the text
