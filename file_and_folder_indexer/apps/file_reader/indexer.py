@@ -106,7 +106,7 @@ def get_file_statistics(path: str) -> dict:
 def get_word_statistics(path: str) -> dict or None:
     """
     Get number of vowels and consonants in word
-    :param word: Word to check
+    :param path: Path to the word in text file
     :return: Dict of 2 values: the number of vowels and the number of
     consonants
     """
