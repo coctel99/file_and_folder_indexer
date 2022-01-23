@@ -15,10 +15,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
 
 from file_and_folder_indexer import views
 from file_and_folder_indexer.apps.file_reader.urls import \
     filesystem_urlpatterns
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="File And Folder Indexer API",
+        default_version='v1',
+        description="Test description",
+    ),
+    public=True,
+    authentication_classes=(),
+)
+
 
 api_urlpatterns = [
     path('', views.api),
@@ -26,7 +39,8 @@ api_urlpatterns = [
 ]
 
 urlpatterns = [
-    path('', views.index),
     path('admin/', admin.site.urls),
     path('api/', include(api_urlpatterns)),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0),
+         name='schema-swagger-ui'),
 ]

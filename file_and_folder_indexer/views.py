@@ -1,9 +1,7 @@
-from django.http import HttpResponse
+from django.http import HttpResponseNotFound
+from rest_framework.decorators import api_view
 
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the index page.")
-
-
+@api_view(['GET'])
 def api(request):
-    return HttpResponse("Api page.")
+    return HttpResponseNotFound()
