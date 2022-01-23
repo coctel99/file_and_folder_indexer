@@ -1,3 +1,4 @@
+import logging
 import os
 from string import ascii_lowercase
 from typing import List, TextIO
@@ -10,6 +11,7 @@ from file_and_folder_indexer.apps.file_reader.apps import FileReaderConfig
 VOWELS = set("aeiou")
 CONSONANTS = set(ascii_lowercase).difference(VOWELS)
 TOP_N = 5
+logger = logging.getLogger(__name__)
 
 
 def get_objects_list(target_path: str) -> List:
@@ -124,8 +126,8 @@ def get_file_statistics(path: str) -> dict:
 
                 break
         except UnicodeError as err:
-            print(f"Read file in {path} with {encoding} encoding "
-                  f"failed:\n{err}")
+            logger.warning(f"Reading file in {path} with {encoding} encoding "
+                           f"failed:\n{err}")
 
     return {'unique_words': unique_words,
             'most_recent': most_recent,
