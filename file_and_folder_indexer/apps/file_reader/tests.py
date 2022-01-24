@@ -34,11 +34,11 @@ class IndexerTestCase(TestCase):
         self.set_up_file('test')
         lst = get_objects_list(test_dir)
         files_and_folders = [test_dir]
-        dir_list = os.listdir(test_dir)
-        for element in dir_list:
-            element = os.path.join(test_dir, element)
-            if os.path.isdir(element) or os.path.isfile(element):
-                files_and_folders.append(element)
+        for root, subdirectories, files in os.walk(test_dir):
+            for subdirectory in subdirectories:
+                files_and_folders.append(os.path.join(root, subdirectory))
+            for file in files:
+                files_and_folders.append(os.path.join(root, file))
 
         self.assertEqual(lst, files_and_folders)
 
