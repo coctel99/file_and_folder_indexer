@@ -1,7 +1,7 @@
 import logging
 import os
 from string import ascii_lowercase
-from typing import List, TextIO
+from typing import Dict, List, TextIO
 from unicodedata import category
 
 from unidecode import unidecode
@@ -43,7 +43,7 @@ def get_next_char(file: TextIO) -> str:
         yield char
 
 
-def get_word_statistics(path: str) -> dict or None:
+def get_word_statistics(path: str) -> Dict or None:
     """
     Get number of vowels and consonants in word
     :param path: Path to the word in text file
@@ -72,7 +72,7 @@ def get_word_statistics(path: str) -> dict or None:
             'consonant_number': consonant_number}
 
 
-def get_file_statistics(path: str) -> dict:
+def get_file_statistics(path: str) -> Dict:
     """
     Reads specified text file by char
     :param path: File path
@@ -125,7 +125,7 @@ def get_file_statistics(path: str) -> dict:
                                            total_words_number)
 
                 break
-        except UnicodeError as err:
+        except ValueError as err:
             logger.warning(f"Reading file in {path} with {encoding} encoding "
                            f"failed:\n{err}")
 
@@ -139,7 +139,7 @@ def get_file_statistics(path: str) -> dict:
             'consonant_number': consonant_number}
 
 
-def get_folder_statistics(root_path: os.path) -> dict:
+def get_folder_statistics(root_path: os.path) -> Dict:
     files_and_folders = get_objects_list(root_path)
     number_of_files = len([file for file in files_and_folders
                            if os.path.isfile(file)])
@@ -167,8 +167,6 @@ def get_folder_statistics(root_path: os.path) -> dict:
     most_recent = sorted_words[:TOP_N]
     least_recent = sorted_words[-TOP_N:]
     least_recent.reverse()
-    # word_lengths = [len(word) for word in unique_words]
-    # average_word_length = sum(word_lengths) / len(unique_words)
     if total_words_number:
         average_word_length = total_words_length / total_words_number
 
