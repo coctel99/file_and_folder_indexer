@@ -1,9 +1,7 @@
-import json
 import logging
 import os
 from dataclasses import dataclass, field
 from string import ascii_lowercase
-
 from typing import Dict, List, TextIO
 from unicodedata import category
 

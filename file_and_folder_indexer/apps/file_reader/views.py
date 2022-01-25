@@ -1,5 +1,4 @@
 import json
-import os
 
 from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseNotFound)
@@ -7,12 +6,10 @@ from django.urls import path
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import api_view
 
-from file_and_folder_indexer.apps.file_reader.apps import FileReaderConfig
 from file_and_folder_indexer.apps.file_reader.conversion import (
     convert_to_path, split_params)
 from file_and_folder_indexer.apps.file_reader.indexer import (
-    get_file_statistics, get_folder_statistics, get_word_statistics,
-    Statistics, FileSystemException, indexate)
+    FileSystemException, Statistics, indexate)
 
 
 @swagger_auto_schema(

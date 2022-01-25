@@ -1,6 +1,5 @@
 import os
 import re
-
 from typing import List
 
 
@@ -36,7 +35,3 @@ def split_params(params_str: str) -> List:
     if params_list.count(""):
         params_list.remove("")
     return params_list
-
-
-if __name__ == '__main__':
-    print(split_params("files_and_folders, numbers;number_of_files"))
