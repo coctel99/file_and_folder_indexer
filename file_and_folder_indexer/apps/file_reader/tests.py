@@ -3,7 +3,7 @@ import os
 from django.test import TestCase
 
 from file_and_folder_indexer.apps.file_reader.indexer import (
-    get_file_statistics, get_folder_statistics, get_objects_list,
+    Statistics, get_file_statistics, get_folder_statistics, get_objects_list,
     get_word_statistics)
 
 test_dir = 'test_dir'
@@ -46,14 +46,14 @@ class IndexerTestCase(TestCase):
         text = 'test'
         self.set_up_file(text)
         word_path = os.path.join(test_file, 'test')
-        info = get_word_statistics(word_path)
+        statistics = get_word_statistics(word_path, Statistics())
         times_in_text = 1
         vowel_number = 1
         consonant_number = 3
         self.assertTrue(all([
-            info.get('times_in_text') == times_in_text,
-            info.get('vowel_number') == vowel_number,
-            info.get('consonant_number') == consonant_number
+            statistics.times_in_text == times_in_text,
+            statistics.vowel_number == vowel_number,
+            statistics.consonant_number == consonant_number
         ]))
 
     def test_get_word_statistics_russian_file(self):
@@ -61,21 +61,21 @@ class IndexerTestCase(TestCase):
         target = 'теста'
         self.set_up_file(text)
         word_path = os.path.join(test_file, target)
-        info = get_word_statistics(word_path)
+        statistics = get_word_statistics(word_path, Statistics())
         times_in_text = text.count(target)
         vowel_number = 2
         consonant_number = 3
         self.assertTrue(all([
-            info.get('times_in_text') == times_in_text,
-            info.get('vowel_number') == vowel_number,
-            info.get('consonant_number') == consonant_number
+            statistics.times_in_text == times_in_text,
+            statistics.vowel_number == vowel_number,
+            statistics.consonant_number == consonant_number
         ]))
 
     def test_get_file_statistics(self):
         text = ('test test test test test words words words words in in in '
                 'a a file')
         self.set_up_file(text)
-        info = get_file_statistics(test_file)
+        statistics = get_file_statistics(test_file, Statistics())
         most_recent = ['test', 'words', 'in', 'a', 'file']
         least_recent = ['file', 'a', 'in', 'words', 'test']
         average_word_length = (sum([len(word) for word in text.split()]) /
@@ -83,17 +83,17 @@ class IndexerTestCase(TestCase):
         vowel_number = 16
         consonant_number = 36
         self.assertTrue(all([
-            info.get('most_recent') == most_recent,
-            info.get('least_recent') == least_recent,
-            info.get('average_word_length') == average_word_length,
-            info.get('vowel_number') == vowel_number,
-            info.get('consonant_number') == consonant_number
+            statistics.most_recent == most_recent,
+            statistics.least_recent == least_recent,
+            statistics.average_word_length == average_word_length,
+            statistics.vowel_number == vowel_number,
+            statistics.consonant_number == consonant_number
         ]))
 
     def test_get_folder_statistics(self):
         text = 'test text'
         self.set_up_file('test text')
-        info = get_folder_statistics(test_dir)
+        statistics = get_folder_statistics(test_dir, Statistics())
         files_and_folders = get_objects_list(test_dir)
         number_of_files = 1
         most_recent = ['test', 'text']
@@ -103,11 +103,11 @@ class IndexerTestCase(TestCase):
         vowel_number = 2
         consonant_number = 6
         self.assertTrue(all([
-            info.get('files_and_folders') == files_and_folders,
-            info.get('number_of_files') == number_of_files,
-            info.get('most_recent') == most_recent,
-            info.get('least_recent') == least_recent,
-            info.get('average_word_length') == average_word_length,
-            info.get('vowel_number') == vowel_number,
-            info.get('consonant_number') == consonant_number
+            statistics.files_and_folders == files_and_folders,
+            statistics.number_of_files == number_of_files,
+            statistics.most_recent == most_recent,
+            statistics.least_recent == least_recent,
+            statistics.average_word_length == average_word_length,
+            statistics.vowel_number == vowel_number,
+            statistics.consonant_number == consonant_number
         ]))
