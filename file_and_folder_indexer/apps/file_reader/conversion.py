@@ -30,6 +30,11 @@ def convert_to_path(url: str) -> str:
 
 
 def split_params(params_str: str) -> List:
+    """
+    Split URL query string into a list of parameters
+    :param params_str: URL query string
+    :return: List of parameters
+    """
     separators = '[;, ]'
     params_list = re.split(separators, params_str)
     if params_list.count(""):

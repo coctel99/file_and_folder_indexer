@@ -13,11 +13,13 @@ empty_dir = os.path.join(test_dir, 'Empty Folder')
 
 class IndexerTestCase(TestCase):
     def setUp(self) -> None:
+        """Create test directories in project root folder."""
         if not os.path.exists(test_dir):
             os.mkdir(test_dir)
             os.mkdir(empty_dir)
 
     def tearDown(self) -> None:
+        """Remove test directories and files."""
         if os.path.exists(test_file):
             os.remove(test_file)
         if os.path.exists(test_dir):
@@ -27,10 +29,13 @@ class IndexerTestCase(TestCase):
 
     @staticmethod
     def set_up_file(test_text: str) -> None:
+        """Creates test '.txt' file with specified text."""
         with open(file=test_file, mode='w', encoding='utf-8') as f:
             f.write(test_text)
 
     def test_get_files_and_folders_paths(self):
+        """Testing that list of folders and files of specified directory is
+        returned."""
         self.set_up_file('test')
         lst = get_objects_list(test_dir)
         files_and_folders = [test_dir]
@@ -43,6 +48,7 @@ class IndexerTestCase(TestCase):
         self.assertEqual(lst, files_and_folders)
 
     def test_get_word_statistics_(self):
+        """Testing that statistics about word in the text file is returned."""
         text = 'test'
         self.set_up_file(text)
         word_path = os.path.join(test_file, 'test')
@@ -57,6 +63,8 @@ class IndexerTestCase(TestCase):
         ]))
 
     def test_get_word_statistics_russian_file(self):
+        """Testing that statistics about word in the russian text file is
+        returned."""
         text = 'Файл для теста с текстом для теста.'
         target = 'теста'
         self.set_up_file(text)
@@ -72,6 +80,7 @@ class IndexerTestCase(TestCase):
         ]))
 
     def test_get_file_statistics(self):
+        """Testing that statistics about the text file is returned."""
         text = ('test test test test test words words words words in in in '
                 'a a file')
         self.set_up_file(text)
@@ -91,6 +100,7 @@ class IndexerTestCase(TestCase):
         ]))
 
     def test_get_folder_statistics(self):
+        """Testing that statistics about the folder is returned."""
         text = 'test text'
         self.set_up_file('test text')
         statistics = get_folder_statistics(test_dir, Statistics())

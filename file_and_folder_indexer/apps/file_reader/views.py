@@ -26,7 +26,12 @@ def filesystem_view(request, url_path: path = None,):
     """
     Get HTTP response with statistics about folder, file or word in the text.
 
-    If 'get' parameter is specified
+    If 'get' query parameter is specified:
+    Returns only specified in query parameter string types of statistics.
+    To specify a number of types of statistics use ';', ',', or ' ' delimiters.
+
+    If no query parameters are specified, returns all types of statistics.
+
     :param request: Get HTTP request
     :param url_path: Path to check
     :return: Statistics about folder, file or word in the text if path is
