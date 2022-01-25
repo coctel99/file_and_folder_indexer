@@ -69,7 +69,7 @@ class Statistics:
         if valid_statistics:
             return valid_statistics
         for attr, value in self.__dict__.items():
-            if value and type(value) is not bool:
+            if value and type(value) is not bool and attr != 'unique_words':
                 valid_statistics.update({attr: value})
         return valid_statistics
 
