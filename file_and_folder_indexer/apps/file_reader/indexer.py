@@ -1,10 +1,13 @@
 import logging
 import os
 from dataclasses import dataclass, field
+from functools import wraps
 from string import ascii_lowercase
-from typing import Dict, List, TextIO
+from typing import Callable, Dict, List, TextIO
 from unicodedata import category
 
+import docx
+from docx.document import Document
 from unidecode import unidecode
 
 from file_and_folder_indexer.apps.file_reader.apps import FileReaderConfig
@@ -99,6 +102,14 @@ def get_objects_list(target_path: str) -> List:
     return filesystem
 
 
+def ignore_kwargs(func: Callable):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        func_value = func(*args)
+        return func_value
+    return wrapper
+
+
 def get_next_char(file: TextIO) -> str:
     """
     Read next character from file
@@ -109,6 +120,54 @@ def get_next_char(file: TextIO) -> str:
         if not char:
             break
         yield char
+
+
+def get_next_docx_char(doc: Document) -> str:
+    """
+    Read next character from file
+    :param doc: Opened .docx file
+    """
+    for paragraph in doc.paragraphs:
+        for char in paragraph.text:
+            yield char
+
+
+class FileManager:
+    def __init__(self, filepath, mode='r', encoding='utf-8'):
+        self.filepath = filepath
+        self.file_ext = os.path.splitext(self.filepath)[1]
+        self.mode = mode
+        self.encoding = encoding
+        self.file = None
+        self.context = None
+        self.opener = None
+        self.reader = None
+
+    def __enter__(self):
+        if self.file_ext not in self.Context.extensions:
+            raise FileSystemException('File extension is not in allowed '
+                                      'extensions list.')
+        self.context = self.Context.extensions.get(self.file_ext)
+        self.opener = self.context.get('opener')
+        self.reader = self.context.get('reader')
+
+        self.file = self.opener(self.filepath, encoding=self.encoding)
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        if self.opener is self.Context.txt_opener:
+            self.file.close()
+
+    @dataclass
+    class Context:
+        docx_opener = ignore_kwargs(docx.Document)
+        docx_reader = get_next_docx_char
+        txt_opener = open
+        txt_reader = get_next_char
+        extensions = {
+            '.txt': {'opener': txt_opener, 'reader': txt_reader},
+            '.docx': {'opener': docx_opener, 'reader': docx_reader},
+        }
 
 
 def get_word_statistics(path: str, statistics: Statistics) -> type(Statistics):
@@ -145,16 +204,12 @@ def get_file_statistics(path: str,
     :return: Dict of 3 values: dict of unique words, vowels number and
     consonants number
     """
-    file_ext = os.path.splitext(path)[1]
-    if file_ext not in FileReaderConfig.allowed_file_extensions:
-        raise FileSystemException("File extension is not in allowed "
-                                  "extensions list.")
-    word = ""
+    word = ''
     encodings_queue = FileReaderConfig.encodings_queue
     for encoding in encodings_queue:
         try:
-            with open(path, encoding=encoding) as fi:
-                for char in get_next_char(fi):
+            with FileManager(path, encoding=encoding) as fi:
+                for char in fi.reader(fi.file):
                     # If character is an any unicode Letter character
                     if category(char).startswith("L"):
                         word += char
@@ -179,8 +234,8 @@ def get_file_statistics(path: str,
 
                 break
         except ValueError as err:
-            logger.warning(f"Reading file in {path} with {encoding} encoding "
-                           f"failed:\n{err}")
+            logger.warning(f'Reading file in {path} with {encoding} encoding '
+                           f'failed:\n{err}')
     return statistics
 
 
@@ -246,5 +301,5 @@ def indexate(path: os.path, statistics: Statistics) -> type(Statistics):
         if info:
             info = info.validate_as_dict(valid_parameters)
             return info
-        raise FileSystemException("No such word in file.")
-    raise FileSystemException("No such file or directory.")
+        raise FileSystemException('No such word in file.')
+    raise FileSystemException('No such file or directory.')
