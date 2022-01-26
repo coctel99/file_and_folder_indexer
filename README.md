@@ -38,15 +38,16 @@ For the specified folder:
 Changing File Reader settings is not recommended and can result into
 crashes and errors!
 
-Settings are specified in 
-*'.\file_and_folder_indexer\apps\file_reader\apps.py'*
-
 ### Change list of readable file extensions
 
-By default, only *'.txt'* files are read, but other file extensions
-could be specified in *allowed_file_extensions* parameter
+By default, only *'.txt' and '.docx'* files are read, but other file extensions
+could be specified in FileManager.Context.extensions dict in *indexer.py* 
+alongside with open and read functions.
 
 ### Change list of readable file encodings
+
+Settings are specified in 
+*'.\file_and_folder_indexer\apps\file_reader\apps.py'*
 
 Application is trying to open a file with different encoding settings
 until it gets opened starting from the left one and going to the right
