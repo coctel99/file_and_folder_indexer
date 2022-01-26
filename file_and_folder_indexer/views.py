@@ -1,15 +1,7 @@
-from django.http import HttpResponse
+from django.http import HttpResponseNotFound
+from rest_framework.decorators import api_view
 
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the index page.")
-
-
+@api_view(['GET'])
 def api(request):
-    return HttpResponse("Api page.")
-
-
-def file(request, path: str = None):
-    if not path:
-        return HttpResponse("Files tree page.   ")
-    return HttpResponse("File page.")
+    return HttpResponseNotFound()

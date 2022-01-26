@@ -9,7 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Checks with black, isort and possibly run tests
     container: python:3.9
-
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -19,3 +20,4 @@ jobs:
           ls -la
           flake8 .
           isort --check .
+          python manage.py test
