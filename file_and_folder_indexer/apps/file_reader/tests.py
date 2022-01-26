@@ -162,6 +162,7 @@ class ApiRequestTestCase(TestCase):
         self.assertTrue(response.status_code == 200)
 
     def test_get_filesystem_word_statistics(self):
+        """Testing that valid word statistics is returned."""
         self.set_up_file('text')
         client = Client()
         url = convert_to_url('/api/filesystem/' + test_file + '/text/')
@@ -176,6 +177,7 @@ class ApiRequestTestCase(TestCase):
         self.assertJSONEqual(response.content, info)
 
     def test_get_filesystem_file_statistics(self):
+        """Testing that valid file statistics is returned."""
         self.set_up_file('text')
         client = Client()
         url = convert_to_url('/api/filesystem/' + test_file + '/')
@@ -197,6 +199,7 @@ class ApiRequestTestCase(TestCase):
         self.assertJSONEqual(response.content, info)
 
     def test_get_filesystem_folder_statistics(self):
+        """Testing that valid folder statistics is returned."""
         self.set_up_file('text')
         client = Client()
         url = convert_to_url('/api/filesystem/' + test_dir + '/')
@@ -224,6 +227,8 @@ class ApiRequestTestCase(TestCase):
         self.assertJSONEqual(response.content, info)
 
     def test_get_files_and_folders_one_query_param(self):
+        """Testing that valid folder statistics is returned if one query param
+        is specified."""
         self.set_up_file('text')
         client = Client()
         url = convert_to_url('/api/filesystem/' + test_dir)
@@ -241,6 +246,8 @@ class ApiRequestTestCase(TestCase):
         self.assertJSONEqual(response.content, info)
 
     def test_get_files_and_folders_multiple_query_param(self):
+        """Testing that valid folder statistics is returned if multiple
+         query params are specified."""
         self.set_up_file('text')
         client = Client()
         url = convert_to_url('/api/filesystem/' + test_dir)
