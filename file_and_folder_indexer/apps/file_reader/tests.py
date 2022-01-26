@@ -165,7 +165,7 @@ class ApiRequestTestCase(TestCase):
         self.set_up_file('text')
         client = Client()
         abs_path = os.path.realpath(test_file)
-        url = convert_to_url('/api/filesystem/' + abs_path + '/text/')
+        url = convert_to_url('/api/filesystem' + abs_path + '/text/')
         info = {
             "times_in_text": 1,
             "vowel_number": 1,
@@ -180,7 +180,7 @@ class ApiRequestTestCase(TestCase):
         self.set_up_file('text')
         client = Client()
         abs_path = os.path.realpath(test_file)
-        url = convert_to_url('/api/filesystem/' + abs_path + '/')
+        url = convert_to_url('/api/filesystem' + abs_path + '/')
         info = {
             "most_recent": [
                 "text"
@@ -202,7 +202,7 @@ class ApiRequestTestCase(TestCase):
         self.set_up_file('text')
         client = Client()
         abs_path = os.path.realpath(test_dir)
-        url = convert_to_url('/api/filesystem/' + abs_path + '/')
+        url = convert_to_url('/api/filesystem' + abs_path + '/')
         info = {
             "files_and_folders": [
                 os.path.realpath(test_dir),
@@ -230,7 +230,7 @@ class ApiRequestTestCase(TestCase):
         self.set_up_file('text')
         client = Client()
         abs_path = os.path.realpath(test_dir)
-        url = convert_to_url('/api/filesystem/' + abs_path)
+        url = convert_to_url('/api/filesystem' + abs_path)
         query_string = '/?get=files_and_folders'
         url = url + query_string
         info = {
@@ -248,7 +248,7 @@ class ApiRequestTestCase(TestCase):
         self.set_up_file('text')
         client = Client()
         abs_path = os.path.realpath(test_dir)
-        url = convert_to_url('/api/filesystem/' + abs_path)
+        url = convert_to_url('/api/filesystem' + abs_path)
         query_string = '/?get=files_and_folders,vowel_number'
         url = url + query_string
         info = {
