@@ -9,8 +9,7 @@ def convert_to_url(path: str) -> str:
     :param path: Path to convert
     :return: Url string
     """
-    url = path.replace(':', '')
-    url = url.replace('\\', '/')
+    url = path.replace('\\', '/')
     url = url.replace(' ', '%20')
     url = url.replace('%', '%25')
     return url

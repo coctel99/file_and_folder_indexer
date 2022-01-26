@@ -1,7 +1,9 @@
+import json
 import os
 
-from django.test import TestCase
+from django.test import Client, TestCase
 
+from file_and_folder_indexer.apps.file_reader.conversion import convert_to_url
 from file_and_folder_indexer.apps.file_reader.indexer import (
     Statistics, get_file_statistics, get_folder_statistics, get_objects_list,
     get_word_statistics)
@@ -121,3 +123,142 @@ class IndexerTestCase(TestCase):
             statistics.vowel_number == vowel_number,
             statistics.consonant_number == consonant_number
         ]))
+
+
+class ApiRequestTestCase(TestCase):
+    def setUp(self) -> None:
+        """Create test directories in project root folder."""
+        if not os.path.exists(test_dir):
+            os.mkdir(test_dir)
+            os.mkdir(empty_dir)
+
+    def tearDown(self) -> None:
+        """Remove test directories and files."""
+        if os.path.exists(test_file):
+            os.remove(test_file)
+        if os.path.exists(test_dir):
+            os.rmdir(empty_dir)
+        if os.path.exists(test_dir):
+            os.rmdir(test_dir)
+
+    @staticmethod
+    def set_up_file(test_text: str) -> None:
+        """Creates test '.txt' file with specified text."""
+        with open(file=test_file, mode='w', encoding='utf-8') as f:
+            f.write(test_text)
+
+    def test_get_filesystem_page(self):
+        """Testing that request to '/filesystem/' without specifying
+        'url_path' gets response with 404 status code."""
+        client = Client()
+        response = client.get('/api/filesystem/')
+        self.assertTrue(response.status_code == 404)
+
+    def test_get_swagger_page(self):
+        """Testing that request to '/swagger/' gets response with 200 status
+        code."""
+        client = Client()
+        response = client.get('/swagger/')
+        self.assertTrue(response.status_code == 200)
+
+    def test_get_filesystem_word_statistics(self):
+        self.set_up_file('text')
+        client = Client()
+        abs_path = os.path.abspath(test_file)
+        url = convert_to_url('/api/filesystem/' + abs_path + '/text/')
+        info = {
+            "times_in_text": 1,
+            "vowel_number": 1,
+            "consonant_number": 3
+        }
+        info = json.dumps(info, indent=4, ensure_ascii=False)
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, info)
+
+    def test_get_filesystem_file_statistics(self):
+        self.set_up_file('text')
+        client = Client()
+        abs_path = os.path.abspath(test_file)
+        url = convert_to_url('/api/filesystem/' + abs_path + '/')
+        info = {
+            "most_recent": [
+                "text"
+            ],
+            "least_recent": [
+                "text"
+            ],
+            "total_words_number": 1,
+            "total_words_length": 4,
+            "average_word_length": 4.0,
+            "vowel_number": 1,
+            "consonant_number": 3
+        }
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, info)
+
+    def test_get_filesystem_folder_statistics(self):
+        self.set_up_file('text')
+        client = Client()
+        abs_path = os.path.abspath(test_dir)
+        url = convert_to_url('/api/filesystem/' + abs_path + '/')
+        info = {
+            "files_and_folders": [
+                os.path.abspath(test_dir),
+                os.path.abspath(empty_dir),
+                os.path.abspath(test_file)
+            ],
+            "number_of_files": 1,
+            "most_recent": [
+                "text"
+            ],
+            "least_recent": [
+                "text"
+            ],
+            "total_words_number": 1,
+            "total_words_length": 4,
+            "average_word_length": 4.0,
+            "vowel_number": 1,
+            "consonant_number": 3
+        }
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, info)
+
+    def test_get_files_and_folders_one_query_param(self):
+        self.set_up_file('text')
+        client = Client()
+        abs_path = os.path.abspath(test_dir)
+        url = convert_to_url('/api/filesystem/' + abs_path)
+        query_string = '/?get=files_and_folders'
+        url = url + query_string
+        info = {
+            "files_and_folders": [
+                os.path.abspath(test_dir),
+                os.path.abspath(empty_dir),
+                os.path.abspath(test_file)
+            ]
+        }
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, info)
+
+    def test_get_files_and_folders_multiple_query_param(self):
+        self.set_up_file('text')
+        client = Client()
+        abs_path = os.path.abspath(test_dir)
+        url = convert_to_url('/api/filesystem/' + abs_path)
+        query_string = '/?get=files_and_folders,vowel_number'
+        url = url + query_string
+        info = {
+            "files_and_folders": [
+                os.path.abspath(test_dir),
+                os.path.abspath(empty_dir),
+                os.path.abspath(test_file)
+            ],
+            "vowel_number": 1,
+        }
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, info)

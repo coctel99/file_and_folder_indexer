@@ -261,6 +261,11 @@ def get_folder_statistics(root_path: os.path,
     if not parse_files:
         return statistics
 
+    statistics.unique_words = {}
+    statistics.vowel_number = 0
+    statistics.consonant_number = 0
+    statistics.total_words_number = 0
+    statistics.total_words_length = 0
     for path in statistics.files_and_folders:
         if os.path.isfile(path):
             file_ext = os.path.splitext(path)[1]
