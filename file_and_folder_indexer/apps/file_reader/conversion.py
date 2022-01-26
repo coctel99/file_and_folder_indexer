@@ -21,9 +21,6 @@ def convert_to_path(url: str) -> str:
     :param url: Url to convert
     :return: Path string
     """
-    if ':' not in url:
-        raise ValueError('No ":" symbol found. Please, specify the absolute'
-                         'path to the folder, file or word in the text file.')
     path = os.path.normpath(url + "/")
     return path
 
