@@ -164,7 +164,7 @@ class ApiRequestTestCase(TestCase):
     def test_get_filesystem_word_statistics(self):
         self.set_up_file('text')
         client = Client()
-        abs_path = os.path.abspath(test_file)
+        abs_path = os.path.realpath(test_file)
         url = convert_to_url('/api/filesystem/' + abs_path + '/text/')
         info = {
             "times_in_text": 1,
@@ -179,7 +179,7 @@ class ApiRequestTestCase(TestCase):
     def test_get_filesystem_file_statistics(self):
         self.set_up_file('text')
         client = Client()
-        abs_path = os.path.abspath(test_file)
+        abs_path = os.path.realpath(test_file)
         url = convert_to_url('/api/filesystem/' + abs_path + '/')
         info = {
             "most_recent": [
@@ -201,13 +201,13 @@ class ApiRequestTestCase(TestCase):
     def test_get_filesystem_folder_statistics(self):
         self.set_up_file('text')
         client = Client()
-        abs_path = os.path.abspath(test_dir)
+        abs_path = os.path.realpath(test_dir)
         url = convert_to_url('/api/filesystem/' + abs_path + '/')
         info = {
             "files_and_folders": [
-                os.path.abspath(test_dir),
-                os.path.abspath(empty_dir),
-                os.path.abspath(test_file)
+                os.path.realpath(test_dir),
+                os.path.realpath(empty_dir),
+                os.path.realpath(test_file)
             ],
             "number_of_files": 1,
             "most_recent": [
@@ -229,15 +229,15 @@ class ApiRequestTestCase(TestCase):
     def test_get_files_and_folders_one_query_param(self):
         self.set_up_file('text')
         client = Client()
-        abs_path = os.path.abspath(test_dir)
+        abs_path = os.path.realpath(test_dir)
         url = convert_to_url('/api/filesystem/' + abs_path)
         query_string = '/?get=files_and_folders'
         url = url + query_string
         info = {
             "files_and_folders": [
-                os.path.abspath(test_dir),
-                os.path.abspath(empty_dir),
-                os.path.abspath(test_file)
+                os.path.realpath(test_dir),
+                os.path.realpath(empty_dir),
+                os.path.realpath(test_file)
             ]
         }
         response = client.get(url)
@@ -247,15 +247,15 @@ class ApiRequestTestCase(TestCase):
     def test_get_files_and_folders_multiple_query_param(self):
         self.set_up_file('text')
         client = Client()
-        abs_path = os.path.abspath(test_dir)
+        abs_path = os.path.realpath(test_dir)
         url = convert_to_url('/api/filesystem/' + abs_path)
         query_string = '/?get=files_and_folders,vowel_number'
         url = url + query_string
         info = {
             "files_and_folders": [
-                os.path.abspath(test_dir),
-                os.path.abspath(empty_dir),
-                os.path.abspath(test_file)
+                os.path.realpath(test_dir),
+                os.path.realpath(empty_dir),
+                os.path.realpath(test_file)
             ],
             "vowel_number": 1,
         }
